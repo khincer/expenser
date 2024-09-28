@@ -27,3 +27,17 @@ export const paymentSchema = z.object({
       message: 'Payment date must be a valid date string if provided',
     }),
 });
+
+
+export const updatePaymentSchema = z.object({
+  name: z.string().min(1, 'Name is required').optional(),
+  amount: z.number().positive('Amount must be a positive number').optional(),
+  currency: z.enum(['Cordobas', 'Dollars']).optional(),
+  dueDate: z.string().refine((date) => !isNaN(Date.parse(date)), {
+    message: 'Due date must be a valid date string (e.g., "2024-09-20T00:00:00.000Z")',
+  }).optional(),
+  status: z.enum(['Pending', 'Completed']).optional(),
+  paymentDate: z.string().optional().refine((date) => !date || !isNaN(Date.parse(date)), {
+    message: 'Payment date must be a valid date string if provided',
+  }),
+});
